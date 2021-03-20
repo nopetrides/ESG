@@ -10,9 +10,9 @@ public class Player
 
 	public Player(Hashtable playerData)
 	{
-		_userId = (int)playerData["userId"];
-		_name = playerData["name"].ToString (); 
-		_coins = (int)playerData["coins"];
+		_userId = (int)playerData[HashConstants.PD_USER_ID];
+		_name = playerData[HashConstants.PD_NAME].ToString();
+		_coins = (int)playerData[HashConstants.PD_COINS];
 	}
 	
 	public int GetUserId()

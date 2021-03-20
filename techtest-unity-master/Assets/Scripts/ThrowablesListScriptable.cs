@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThrowablesListScriptables : MonoBehaviour
+/// <summary>
+/// This is the class for each gamemode, which references a set of Throwable Scriptable Objects
+/// </summary>
+[CreateAssetMenu(fileName = "Throwable_List", menuName = "Data/New Game Mode")]
+public class ThrowablesListScriptables : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private string _name;
+    public string Name => _name;
+    [SerializeField] private ThrowableScriptable[] _throwablesInMode;
 
-    // Update is called once per frame
-    void Update()
+    public ThrowableScriptable[] GetThrowables()
     {
-        
+        return _throwablesInMode;
     }
 }

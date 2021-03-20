@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This is the data container for each "hand" the player (and computer) can choose.
+/// </summary>
 [CreateAssetMenu(fileName = "Throwable_Data", menuName = "Data/New Throwable")]
 public class ThrowableScriptable : ScriptableObject
 {

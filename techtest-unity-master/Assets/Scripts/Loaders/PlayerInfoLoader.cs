@@ -6,14 +6,16 @@ public class PlayerInfoLoader
 {
 	public delegate void OnLoadedAction(Hashtable playerData);
 	public event OnLoadedAction OnLoaded;
-
-	public void load()
+	
+	public void Load() // capitalized
 	{
 		Hashtable mockPlayerData = new Hashtable();
-		mockPlayerData["userId"] = 1;
-		mockPlayerData["name"] = "Player 1";
-		mockPlayerData["coins"] = 50;
+		mockPlayerData[HashConstants.PD_USER_ID] = 1;
+		mockPlayerData[HashConstants.PD_NAME] = "Player 1";
+		mockPlayerData[HashConstants.PD_COINS] = 50;
 
-		OnLoaded(mockPlayerData);
+		OnLoaded?.Invoke(mockPlayerData); // added ? to ensure event is not firing null
 	}
+	
+	
 }

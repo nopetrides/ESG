@@ -6,25 +6,21 @@ using System;
 
 public class GameController : MonoBehaviour
 {
-	public Text playerHand;
-	public Text enemyHand;
+	[SerializeField] private Text playerHand; // converted from public to SerializedField
+	[SerializeField] private Text enemyHand;
 
-	private Text _nameLabel;
-	private Text _moneyLabel;
+	[SerializeField] private Text nameLabel; // these can also be serialized fields instead of being assigned on Awake
+	[SerializeField] private Text moneyLabel;
 
 	private Player _player;
-
-	void Awake()
-	{
-		_nameLabel = transform.Find ("Canvas/Name").GetComponent<Text>();
-		_moneyLabel = transform.Find ("Canvas/Money").GetComponent<Text>();
-	}
-
+	
+	// removed Awake()
+	
 	void Start()
 	{
 		PlayerInfoLoader playerInfoLoader = new PlayerInfoLoader();
 		playerInfoLoader.OnLoaded += OnPlayerInfoLoaded;
-		playerInfoLoader.load();
+		playerInfoLoader.Load();
 	}
 
 	void Update()
@@ -39,8 +35,8 @@ public class GameController : MonoBehaviour
 
 	public void UpdateHud()
 	{
-		_nameLabel.text = "Name: " + _player.GetName();
-		_moneyLabel.text = "Money: $" + _player.GetCoins().ToString();
+		nameLabel.text = "Name: " + _player.GetName();
+		moneyLabel.text = "Money: $" + _player.GetCoins(); // ToString is uncessary
 	}
 
 	public void HandlePlayerInput(int item)
@@ -67,15 +63,15 @@ public class GameController : MonoBehaviour
 	{
 		UpdateGameLoader updateGameLoader = new UpdateGameLoader(playerChoice);
 		updateGameLoader.OnLoaded += OnGameUpdated;
-		updateGameLoader.load();
+		updateGameLoader.Load();
 	}
 
 	public void OnGameUpdated(Hashtable gameUpdateData)
 	{
-		playerHand.text = DisplayResultAsText((UseableItem)gameUpdateData["resultPlayer"]);
-		enemyHand.text = DisplayResultAsText((UseableItem)gameUpdateData["resultOpponent"]);
+		playerHand.text = DisplayResultAsText((UseableItem)gameUpdateData[HashConstants.GUD_PLAYER_RESULT]);
+		enemyHand.text = DisplayResultAsText((UseableItem)gameUpdateData[HashConstants.GUD_OPPONENT_RESULT]);
 
-		_player.ChangeCoinAmount((int)gameUpdateData["coinsAmountChange"]);
+		_player.ChangeCoinAmount((int)gameUpdateData[HashConstants.GUD_MONEY_CHANGE]);
 	}
 
 	private string DisplayResultAsText (UseableItem result)
