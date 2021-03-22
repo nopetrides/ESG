@@ -10,6 +10,7 @@ public class ThrowableScriptable : ScriptableObject
 {
     [SerializeField] private Sprite _icon;
     [SerializeField] private string _name;
+    public string Name => _name;
     [SerializeField] private ThrowableScriptable[] _winsAgainst;
     [SerializeField] private ThrowableScriptable[] _losesAgainst;
 

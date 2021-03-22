@@ -8,6 +8,8 @@ public class Player
 	private string _name;
 	private int _coins;
 
+	public event Action OnCoinsChanged;
+	
 	public Player(Hashtable playerData)
 	{
 		_userId = (int)playerData[HashConstants.PD_USER_ID];
@@ -33,5 +35,6 @@ public class Player
 	public void ChangeCoinAmount(int amount)
 	{
 		_coins += amount;
+		OnCoinsChanged?.Invoke();
 	}
 }

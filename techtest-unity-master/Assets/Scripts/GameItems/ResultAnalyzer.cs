@@ -9,62 +9,26 @@ public enum Result
 }
 
 public class ResultAnalyzer
-{
-	public static Result GetResultState(UseableItem playerHand, UseableItem enemyHand)
+{	
+	/// <summary>
+	/// Streamlined process
+	/// </summary>
+	/// <param name="firstHand"></param>
+	/// <param name="secondHand"></param>
+	/// <returns>player hand win/lose/draw against second hand</returns>
+	public static Result GetResultState(ThrowableScriptable playerHand, ThrowableScriptable enemyHand)
 	{
-		if (isStronger(playerHand, enemyHand))
-		{
-			return Result.Won;
-		}
-		else if (isStronger(enemyHand, playerHand))
-		{
-			return Result.Lost;
-		}
-		else
-		{
-			return Result.Draw;
-		}
+		return CalculateResult(playerHand, enemyHand);
 	}
 
-	private static bool isStronger (UseableItem firstHand, UseableItem secondHand)
+	/// <summary>
+	/// Renamed and reformatted
+	/// </summary>
+	/// <param name="firstHand"></param>
+	/// <param name="secondHand"></param>
+	/// <returns>first hand win/lose/draw against second hand</returns>
+	private static Result CalculateResult(ThrowableScriptable firstHand, ThrowableScriptable secondHand)
 	{
-		switch (firstHand)
-		{
-			case UseableItem.Rock:
-			{
-				switch (secondHand)
-				{
-					case UseableItem.Scissors:
-						return true;
-					case UseableItem.Paper:
-						return false;
-				}
-				break;
-			}
-			case UseableItem.Paper:
-			{
-				switch (secondHand)
-				{
-					case UseableItem.Rock:
-						return true;
-					case UseableItem.Scissors:
-						return false;
-				}
-				break;
-			}
-			case UseableItem.Scissors:
-			{
-				switch (secondHand)
-				{
-					case UseableItem.Paper:
-						return true;
-					case UseableItem.Rock:
-						return false;
-				}
-				break;
-			}
-		}
-
-		return false;
+		return firstHand.CalculateResult(secondHand);
 	}
 }
