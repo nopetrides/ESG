@@ -6,12 +6,8 @@ using System.Collections.Generic;
 // renamed
 public class GameUpdateLogic
 {
-	public static void Load(ThrowableScriptable playerChoice, Action<Dictionary<string,object>> onLoaded) // capitalized
+	public static void Load(ThrowableScriptable playerChoice, ThrowableScriptable opponentHand, Action<Dictionary<string,object>> onLoaded) // capitalized
 	{
-		// replace with a basic AI
-		//UseableItem opponentHand = (UseableItem)Enum.GetValues(typeof(UseableItem)).GetValue(UnityEngine.Random.Range(1, 4)); // bugfix: change range 0,4 to 1,4 
-		ThrowableScriptable opponentHand = null;
-		
 		Dictionary<string, object> mockGameUpdate = new Dictionary<string,object>();
 		mockGameUpdate[HashConstants.GUD_PLAYER_RESULT] = playerChoice;
 		mockGameUpdate[HashConstants.GUD_OPPONENT_RESULT] = opponentHand;

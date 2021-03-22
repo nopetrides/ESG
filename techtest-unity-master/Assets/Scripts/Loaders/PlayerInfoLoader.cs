@@ -4,10 +4,7 @@ using System;
 
 public class PlayerInfoLoader
 {
-	public delegate void OnLoadedAction(Hashtable playerData);
-	public event OnLoadedAction OnLoaded;
-	
-	public void Load() // capitalized
+	public static void Load(Action<Hashtable> OnLoaded) // capitalized
 	{
 		Hashtable mockPlayerData = new Hashtable();
 		mockPlayerData[HashConstants.PD_USER_ID] = 1;
@@ -16,6 +13,4 @@ public class PlayerInfoLoader
 
 		OnLoaded?.Invoke(mockPlayerData); // added ? to ensure event is not firing null
 	}
-	
-	
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,46 +10,33 @@ using UnityEngine;
 public class ThrowableScriptable : ScriptableObject
 {
     [SerializeField] private Sprite _icon;
-    [SerializeField] private string _name;
-    public string Name => _name;
+    [SerializeField] private string _description;
+    public string Description => _description;
     [SerializeField] private ThrowableScriptable[] _winsAgainst;
     [SerializeField] private ThrowableScriptable[] _losesAgainst;
 
-    private Dictionary<string, ThrowableScriptable> _winsAgainstRuntime;
-    private Dictionary<string, ThrowableScriptable> _losesAgainstRuntime;
-
-    public void OnAfterDeserialize()
-    {
-        _winsAgainstRuntime = new Dictionary<string, ThrowableScriptable>();
-        for (int i = 0; i < _winsAgainst.Length; i++)
-        {
-            _winsAgainstRuntime.Add(_winsAgainst[i]._name, _winsAgainst[i]);
-        }
-
-        _losesAgainstRuntime = new Dictionary<string, ThrowableScriptable>();
-        for (int i = 0; i < _losesAgainst.Length; i++)
-        {
-            _losesAgainstRuntime.Add(_losesAgainst[i]._name, _losesAgainst[i]);
-        }
-    }
-
     public Result CalculateResult(ThrowableScriptable opposingHand)
     {
-        if (this._name == opposingHand._name)
+        Debug.Log("Player Chose: " + this.Description);
+        Debug.Log("Opponent Chose: " + opposingHand.Description);
+        if (this._description == opposingHand._description)
         {
             return Result.Draw;
         }
-        if (_winsAgainstRuntime.ContainsKey(opposingHand._name))
+        
+        foreach (ThrowableScriptable w in _winsAgainst)
         {
-            return Result.Won;
+            if (w == opposingHand)
+                return Result.Won;
         }
-        if (_losesAgainstRuntime.ContainsKey(opposingHand._name))
+        foreach (ThrowableScriptable l in _losesAgainst)
         {
+            if (l == opposingHand)
             return Result.Lost;
         }
 
-        Debug.LogError("chosen hand " + this._name + " does not have a win or lose condition against " +
-                       opposingHand._name);
+        Debug.LogError("chosen hand " + this._description + " does not have a win or lose condition against " +
+                       opposingHand._description);
         return Result.Draw;
 
     }
