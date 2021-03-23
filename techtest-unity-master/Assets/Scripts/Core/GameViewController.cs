@@ -74,7 +74,7 @@ public class GameViewController : MonoBehaviour
 			button.Setup(choice);
 			button.Clickable.onClick.AddListener(delegate
 			{
-				AudioManager.Instance.PlayButtonSelectedSFX();
+				AudioManager.Instance.PlayButtonPressedSFX();
 				HandlePlayerInput(choice);
 			});
 		}
@@ -97,6 +97,7 @@ public class GameViewController : MonoBehaviour
 	/// </summary>
 	public void RestPlayerButton()
 	{
+		AudioManager.Instance.PlayButtonPressedSFX();
 		gameOverPopup.SetActive(false);
 		gameManager.ResetPlayer();
 		AudioManager.Instance.PlayButtonPressedSFX();
@@ -104,6 +105,7 @@ public class GameViewController : MonoBehaviour
 
 	public void ReturnToGameModeMenu()
 	{
+		AudioManager.Instance.PlayButtonPressedSFX();
 		SceneManager.LoadScene("GameModeSelectScene");
 	}
 

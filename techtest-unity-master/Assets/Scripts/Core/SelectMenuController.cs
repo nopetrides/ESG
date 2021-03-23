@@ -25,7 +25,6 @@ public class SelectMenuController : MonoBehaviour
             button.Setup(gameMode);
             button.Clickable.onClick.AddListener(delegate
             {
-                AudioManager.Instance.PlayButtonPressedSFX();
                 ButtonGameModeSelected(gameMode);
             });
         }
@@ -35,12 +34,14 @@ public class SelectMenuController : MonoBehaviour
 
     private void ButtonGameModeSelected(ThrowablesListScriptables gameMode)
     {
+        AudioManager.Instance.PlayButtonPressedSFX();
         gameModeData.LastSelectedGameMode = gameMode;
         SceneManager.LoadScene("BRPS");
     }
 
     public void NewPlayerButton()
     {
+        AudioManager.Instance.PlayButtonPressedSFX();
         PlayerInfoLoader.CreatePlayer(null);
     }
 }
