@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// This is main game manager
@@ -9,6 +10,8 @@ using UnityEngine;
 public class GameLogicController : MonoBehaviour
 {
     [SerializeField] private GameModeScriptable gameModeData = null;
+
+    [SerializeField] private AudioClip gameMusic;
     public GameModeScriptable GameMode => gameModeData;
     public event Action<Hashtable> OnPlayerInfoLoaded;
     public event Action OnPlayerInfoUpdated;
@@ -19,20 +22,43 @@ public class GameLogicController : MonoBehaviour
     
     void Start()
     {
+        if (AudioManager.Instance == null)
+        {
+            // we know that the audio manager is only in the game mode scene, so they must have started the game from the game scene
+            SceneManager.LoadScene("GameModeSelectScene");
+            return;
+        }
         // we don't need to create an instance of an object
-        PlayerInfoLoader.Load(PlayerInfoLoaded);
+        PlayerInfoLoader.LoadPlayer(PlayerInfoLoaded);
         _opponent = new OpponentDecider();
+        AudioManager.Instance.PlayLoopingMusic(gameMusic);
     }
 
+    public void ResetPlayer()
+    {
+        PlayerInfoLoader.CreatePlayer(PlayerInfoLoaded);
+    }
+    
     void PlayerInfoLoaded(Hashtable info)
-    {		
-        _player = new Player(info);
-        _player.OnCoinsChanged += PlayerInfoChanged;
+    {
+        if (_player == null)
+        {
+            _player = new Player(info);
+            _player.OnCoinsChanged += PlayerInfoChanged;
+        }
+        else
+        {
+            _player.Update(info);
+        }
+
         OnPlayerInfoLoaded?.Invoke(info);
     }
 
     void PlayerInfoChanged()
     {
+        // we could move this into the Player class, but we may have more than one value to change in the player
+        // this function should be called once per set of changes
+        PlayerInfoLoader.SavePlayer(_player.GetCoins()); 
         OnPlayerInfoUpdated?.Invoke();
     }
 

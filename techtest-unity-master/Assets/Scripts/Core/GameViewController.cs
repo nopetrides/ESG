@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// This script is just the view controller, and should not perform any logic or loading
@@ -20,6 +21,7 @@ public class GameViewController : MonoBehaviour
 	[SerializeField] private Text moneyLabel;
 	[SerializeField] private ThrowableButton playerChoiceButtonPrefab = null;
 	[SerializeField] private Transform buttonsParent = null;
+	[SerializeField] private GameObject gameOverPopup = null; // we could make this a prefab, but for simplicity its just a game object in the scene.
 
 	// removed Awake()
 
@@ -29,6 +31,7 @@ public class GameViewController : MonoBehaviour
 		gameManager.OnPlayerInfoLoaded += OnPlayerInfoLoaded;
 		gameManager.OnPlayerInfoUpdated += UpdatePlayerMoney;
 		gameManager.OnGameUpdated += OnGameUpdated;
+		gameOverPopup.SetActive(false); // ensure the game over state is hidden by default
 	}
 
 	private void OnDisable()
@@ -63,6 +66,7 @@ public class GameViewController : MonoBehaviour
 			button.Setup(choice);
 			button.Clickable.onClick.AddListener(delegate
 			{
+				AudioManager.Instance.PlayButtonSelectedSFX();
 				HandlePlayerInput(choice);
 			});
 		}
@@ -73,6 +77,25 @@ public class GameViewController : MonoBehaviour
 	public void UpdatePlayerMoney()
 	{
 		moneyLabel.text = "Money: $" + gameManager.Player.GetCoins(); // ToString is uncessary
+		if (gameManager.Player.GetCoins() <= 0)
+		{
+			gameOverPopup.SetActive(true);
+		}
+	}
+
+	/// <summary>
+	/// Game over screen creates new player
+	/// </summary>
+	public void RestPlayerButton()
+	{
+		gameOverPopup.SetActive(false);
+		gameManager.ResetPlayer();
+		AudioManager.Instance.PlayButtonPressedSFX();
+	}
+
+	public void ReturnToGameModeMenu()
+	{
+		SceneManager.LoadScene("GameModeSelectScene");
 	}
 
 	/// <summary>

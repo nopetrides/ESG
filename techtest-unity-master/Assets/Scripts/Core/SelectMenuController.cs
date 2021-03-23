@@ -9,9 +9,11 @@ public class SelectMenuController : MonoBehaviour
     [SerializeField] private GameModeButton modeButtonPrefab = null;
     [SerializeField] private GameModeScriptable gameModeData = null;
     [SerializeField] private Transform buttonsParent = null;
+    [SerializeField] private AudioClip menuMusic = null;
 
     private void Start()
     {
+        AudioManager.Instance.PlayLoopingMusic(menuMusic);
         SetupGameModeButtons();
     }
 
@@ -23,6 +25,7 @@ public class SelectMenuController : MonoBehaviour
             button.Setup(gameMode);
             button.Clickable.onClick.AddListener(delegate
             {
+                AudioManager.Instance.PlayButtonPressedSFX();
                 ButtonGameModeSelected(gameMode);
             });
         }
@@ -34,5 +37,10 @@ public class SelectMenuController : MonoBehaviour
     {
         gameModeData.LastSelectedGameMode = gameMode;
         SceneManager.LoadScene("BRPS");
+    }
+
+    public void NewPlayerButton()
+    {
+        PlayerInfoLoader.CreatePlayer(null);
     }
 }

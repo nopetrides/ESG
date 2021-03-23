@@ -16,6 +16,17 @@ public class Player
 		_name = playerData[HashConstants.PD_NAME].ToString();
 		_coins = (int)playerData[HashConstants.PD_COINS];
 	}
+
+	/// <summary>
+	/// Reusing the player object instead of destroying and instantiating a new one is more efficient
+	/// </summary>
+	/// <param name="playerData"></param>
+	public void Update(Hashtable playerData)
+	{
+		_userId = (int)playerData[HashConstants.PD_USER_ID];
+		_name = playerData[HashConstants.PD_NAME].ToString();
+		_coins = (int)playerData[HashConstants.PD_COINS];
+	}
 	
 	public int GetUserId()
 	{
