@@ -27,6 +27,7 @@ public class GameViewController : MonoBehaviour
 	[SerializeField] private Text streakText = null;
 	[SerializeField] private Text bestMoneyText = null;
 	[SerializeField] private Text bestStreakText = null;
+	[SerializeField] private Image rulesImage = null;
 
 	// removed Awake()
 
@@ -67,7 +68,7 @@ public class GameViewController : MonoBehaviour
 
 	private void SetupPlayerChoices()
 	{
-		foreach (var choice in gameManager.GameMode.LastSelectedGameMode.GetThrowables())
+		foreach (var choice in gameManager.GameMode.LastSelectedGameMode.Throwables)
 		{
 			ThrowableButton button = Instantiate(playerChoiceButtonPrefab, buttonsParent, false);
 			button.Setup(choice);
@@ -78,6 +79,7 @@ public class GameViewController : MonoBehaviour
 			});
 		}
 
+		rulesImage.sprite = gameManager.GameMode.LastSelectedGameMode.RulesSprite;
 		playerChoiceButtonPrefab.gameObject.SetActive(false);
 	}
 	

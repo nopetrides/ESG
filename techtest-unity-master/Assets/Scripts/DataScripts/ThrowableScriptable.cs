@@ -14,6 +14,7 @@ public class ThrowableScriptable : ScriptableObject
     public string Description => _description;
     [SerializeField] private ThrowableScriptable[] _winsAgainst;
     [SerializeField] private ThrowableScriptable[] _losesAgainst;
+    public ThrowableScriptable[] LosesAgainst => _losesAgainst;
 
     public Result CalculateResult(ThrowableScriptable opposingHand)
     {

@@ -10,10 +10,10 @@ public class ThrowablesListScriptables : ScriptableObject
 {
     [SerializeField] private string _description;
     public string Description => _description;
-    [SerializeField] private ThrowableScriptable[] _throwablesInMode;
+    [SerializeField] private ThrowableScriptable[] _throwablesInMode;    
+    public ThrowableScriptable[] Throwables => _throwablesInMode;
+    [SerializeField] private Sprite _rulesSprite;
+    public Sprite RulesSprite => _rulesSprite;
 
-    public ThrowableScriptable[] GetThrowables()
-    {
-        return _throwablesInMode;
-    }
+
 }
