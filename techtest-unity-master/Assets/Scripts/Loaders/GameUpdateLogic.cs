@@ -6,26 +6,25 @@ using System.Collections.Generic;
 // renamed
 public class GameUpdateLogic
 {
-	public static void Load(ThrowableScriptable playerChoice, ThrowableScriptable opponentHand, Action<Dictionary<string,object>> onLoaded) // capitalized
+	public static void UpdateGame(ThrowableScriptable playerChoice, ThrowableScriptable opponentHand, Action<Dictionary<string,object>, Result> onLoaded) // capitalized
 	{
+		Result drawResult = ResultAnalyzer.GetResultState(playerChoice, opponentHand);
 		Dictionary<string, object> mockGameUpdate = new Dictionary<string,object>();
 		mockGameUpdate[HashConstants.GUD_PLAYER_RESULT] = playerChoice;
 		mockGameUpdate[HashConstants.GUD_OPPONENT_RESULT] = opponentHand;
-		mockGameUpdate[HashConstants.GUD_MONEY_CHANGE] = GetCoinsAmount(playerChoice, opponentHand);
+		mockGameUpdate[HashConstants.GUD_MONEY_CHANGE] = GetCoinsAmount(drawResult);
 		
-		onLoaded?.Invoke(mockGameUpdate); // ? to avoid null refs
+		onLoaded?.Invoke(mockGameUpdate,drawResult); // ? to avoid null refs
 	}
 
 	// Its weird that GetCoinsAmount is in the UpdateGameLoader
-	private static int GetCoinsAmount (ThrowableScriptable playerHand, ThrowableScriptable opponentHand)
+	private static int GetCoinsAmount (Result result)
 	{
-		Result drawResult = ResultAnalyzer.GetResultState(playerHand, opponentHand);
-
-		if (drawResult.Equals (Result.Won))
+		if (result.Equals (Result.Won))
 		{
 			return 10;
 		}
-		else if (drawResult.Equals (Result.Lost))
+		else if (result.Equals (Result.Lost))
 		{
 			return -10;
 		}

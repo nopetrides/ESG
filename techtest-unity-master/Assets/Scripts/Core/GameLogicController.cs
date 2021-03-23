@@ -15,11 +15,11 @@ public class GameLogicController : MonoBehaviour
     public GameModeScriptable GameMode => gameModeData;
     public event Action<Hashtable> OnPlayerInfoLoaded;
     public event Action OnPlayerInfoUpdated;
-    public event Action<Dictionary<string,object>> OnGameUpdated;
+    public event Action<Dictionary<string,object>, Result> OnGameUpdated;
     private Player _player;
     public Player Player => _player;
     private OpponentDecider _opponent;
-    
+
     void Start()
     {
         if (AudioManager.Instance == null)
@@ -50,7 +50,6 @@ public class GameLogicController : MonoBehaviour
         {
             _player.Update(info);
         }
-
         OnPlayerInfoLoaded?.Invoke(info);
     }
 
@@ -58,7 +57,7 @@ public class GameLogicController : MonoBehaviour
     {
         // we could move this into the Player class, but we may have more than one value to change in the player
         // this function should be called once per set of changes
-        PlayerInfoLoader.SavePlayer(_player.GetCoins()); 
+        PlayerInfoLoader.SavePlayer(_player.Coins, _player.MostCoins,_player.Streak, _player.BestStreak); 
         OnPlayerInfoUpdated?.Invoke();
     }
 
@@ -68,13 +67,14 @@ public class GameLogicController : MonoBehaviour
     public void OnInputHandled(ThrowableScriptable playerChoice)
     {
         ThrowableScriptable opponentChoice = _opponent.GetOpponentHand(gameModeData.LastSelectedGameMode, playerChoice);
-        GameUpdateLogic.Load(playerChoice, opponentChoice, GameUpdated);
+        GameUpdateLogic.UpdateGame(playerChoice, opponentChoice, GameUpdated);
     }
 
-    private void GameUpdated(Dictionary<string,object> gameUpdateData)
+    private void GameUpdated(Dictionary<string,object> gameUpdateData, Result outcome)
     {
-        _player.ChangeCoinAmount((int)gameUpdateData[HashConstants.GUD_MONEY_CHANGE]);
-        OnGameUpdated?.Invoke(gameUpdateData);
+        _player.SetStreak(outcome == Result.Won ? _player.Streak+1 : 0);
+        _player.ChangeCoinAmount((int) gameUpdateData[HashConstants.GUD_MONEY_CHANGE] * (_player.Streak == 0 ? 1 : _player.Streak));
+        OnGameUpdated?.Invoke(gameUpdateData, outcome);
     }
 
     private void OnDestroy()

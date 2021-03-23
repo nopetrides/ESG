@@ -11,4 +11,8 @@ public static class HashConstants
     public const string PD_USER_ID = "userId";
     public const string PD_NAME = "name";
     public const string PD_COINS = "coins";
+
+    public const string PD_STREAK = "streak";
+    public const string PD_MAX_MONEY = "mostMoney";
+    public const string PD_BEST_STREAK = "bestStreak";
 }
